@@ -14,12 +14,10 @@
    ============================================================ */
 
 @theme {
-  /* Brand family — carries the largest fields */
   --color-brand: #6d5ef6;
   --color-brand-deep: #4a3ad4;
   --color-brand-soft: #eeebff;
 
-  /* Full-chroma accents */
   --color-accent: #ff4d8d;
   --color-wish: #ff2d78;
   --color-wish-soft: #ffe4ee;
@@ -27,20 +25,18 @@
   --color-cyan: #22d3ee;
   --color-save: #84cc16;
   --color-lime: #a3e635;
-  --color-amber: #ffb020;
+  --color-amber: #b45309;
 
-  /* Semantic tones */
   --color-success: #10b981;
   --color-warning: #f59e0b;
   --color-danger: #ef4444;
   --color-info: #0ea5e9;
 
-  /* Warm neutrals — background, surface, overlay, border */
   --color-bg: #f4f2ee;
   --color-surface: #ffffff;
   --color-surface-2: #faf8f5;
   --color-text: #11131b;
-  --color-muted: #5f6478;
+  --color-muted: #52576b;
   --color-border: #e5e0d8;
 
   --radius-card: 1.15rem;
@@ -49,8 +45,7 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 
   --animate-fade-up: fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
-  --animate-drift: drift 28s ease-in-out infinite alternate;
-  --animate-shimmer: shimmer 1.6s linear infinite;
+  --animate-shimmer: shimmer 1.4s ease-in-out infinite;
   --animate-pop: pop 0.32s cubic-bezier(0.34, 1.56, 0.64, 1) both;
   --animate-slide-in: slide-in 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
   --animate-slide-up: slide-up 0.34s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -59,20 +54,16 @@
 }
 
 /* ============================================================
-   KEYFRAMES
+   KEYFRAMES — opacity / transform only
    ============================================================ */
 
 @keyframes fade-up {
   from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: none; }
 }
-@keyframes drift {
-  from { transform: translate3d(-4%, -3%, 0) scale(1); }
-  to { transform: translate3d(5%, 4%, 0) scale(1.15); }
-}
 @keyframes shimmer {
-  from { background-position: -200% 0; }
-  to { background-position: 200% 0; }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 @keyframes pop {
   from { opacity: 0; transform: scale(0.92); }
@@ -109,6 +100,7 @@
     background-color: var(--color-bg);
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    scrollbar-gutter: stable;
     scrollbar-width: thin;
     scrollbar-color: var(--color-brand) transparent;
   }
@@ -119,10 +111,11 @@
     --color-surface: #11141e;
     --color-surface-2: #171b28;
     --color-text: #eceef8;
-    --color-muted: #98a0bb;
+    --color-muted: #a3abc6;
     --color-border: #232838;
     --color-brand-soft: #1b1940;
     --color-wish-soft: #2a1220;
+    --color-amber: #fbbf24;
   }
 
   body {
@@ -149,11 +142,10 @@
   }
 
   ::placeholder {
-    color: color-mix(in oklab, var(--color-muted) 80%, transparent);
+    color: color-mix(in oklab, var(--color-muted) 85%, transparent);
     opacity: 1;
   }
 
-  /* Global scrollbar drawn in the artifact's own palette */
   ::-webkit-scrollbar { width: 11px; height: 11px; }
   ::-webkit-scrollbar-track {
     background: color-mix(in oklab, var(--color-brand) 9%, transparent);
@@ -184,8 +176,8 @@
 }
 
 @utility glass {
-  background-color: color-mix(in oklab, var(--color-surface) 76%, transparent);
-  backdrop-filter: blur(16px) saturate(1.5);
+  background-color: color-mix(in oklab, var(--color-surface) 82%, transparent);
+  backdrop-filter: blur(12px);
 }
 
 @utility tap {
@@ -201,16 +193,7 @@
   border: 1px solid var(--color-border);
   background-color: var(--color-surface-2);
   color: var(--color-text);
-  transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
-}
-
-@utility shimmer {
-  background-image: linear-gradient(90deg,
-    color-mix(in oklab, var(--color-border) 45%, transparent) 25%,
-    color-mix(in oklab, var(--color-border) 15%, transparent) 37%,
-    color-mix(in oklab, var(--color-border) 45%, transparent) 63%);
-  background-size: 200% 100%;
-  animation: var(--animate-shimmer);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
 @utility chip {
@@ -225,6 +208,50 @@
   font-size: 0.8125rem;
   font-weight: 600;
   transition: border-color 0.16s ease, color 0.16s ease, background-color 0.16s ease;
+}
+
+@utility shimmer {
+  background-color: color-mix(in oklab, var(--color-border) 55%, transparent);
+  animation: var(--animate-shimmer);
+}
+
+/* Ambient page field — three palette-derived radial stops, paint-isolated. */
+@utility aurora-field {
+  contain: paint;
+  background-image:
+    radial-gradient(48rem 32rem at 12% -8%, color-mix(in oklab, var(--color-brand) 30%, transparent), transparent 65%),
+    radial-gradient(40rem 30rem at 92% 4%, color-mix(in oklab, var(--color-accent) 24%, transparent), transparent 62%),
+    radial-gradient(46rem 34rem at 50% 108%, color-mix(in oklab, var(--color-cyan) 22%, transparent), transparent 66%);
+}
+
+@utility route-progress {
+  background-image: linear-gradient(90deg, var(--color-brand), var(--color-accent) 45%, var(--color-cyan));
+}
+
+/* Skeleton family. Each utility owns its full animation shorthand so the
+   stagger delay can never be reset by cascade order. `--slot` is the card
+   index; `--sk-offset` is set per block with a Tailwind arbitrary property. */
+@utility sk-block {
+  background-color: color-mix(in oklab, var(--color-border) 58%, transparent);
+  animation: shimmer 1.4s ease-in-out infinite;
+  animation-delay: calc(var(--slot, 0) * 55ms + var(--sk-offset, 0ms));
+}
+
+@utility sk-lane {
+  background-image: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--color-brand) 15%, var(--color-surface-2)),
+    color-mix(in oklab, var(--color-cyan) 12%, var(--color-surface-2)) 55%,
+    color-mix(in oklab, var(--color-accent) 11%, var(--color-surface-2))
+  );
+  animation: shimmer 1.4s ease-in-out infinite;
+  animation-delay: calc(var(--slot, 0) * 55ms);
+}
+
+@utility sk-action {
+  background-color: color-mix(in oklab, var(--color-brand) 28%, var(--color-surface-2));
+  animation: shimmer 1.4s ease-in-out infinite;
+  animation-delay: calc(var(--slot, 0) * 55ms + 280ms);
 }
 
 @utility scroll-fade {
@@ -269,31 +296,33 @@
 }
 
 /* ============================================================
-   COMPONENT STATE RULES (unlayered — win over utilities)
+   COMPONENT STATE RULES
    ============================================================ */
 
 .field:hover {
   border-color: color-mix(in oklab, var(--color-brand) 45%, var(--color-border));
 }
-
 .field:focus {
   outline: none;
   border-color: var(--color-brand);
   box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-brand) 30%, transparent);
 }
-
 .field[aria-invalid="true"] {
   border-color: var(--color-danger);
   box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-danger) 16%, transparent);
 }
-
 .field:disabled {
   cursor: not-allowed;
   opacity: 0.55;
 }
 
-/* Dual-thumb price slider: only the thumbs receive pointer events,
-   so two stacked inputs stay independently draggable. */
+@media (max-width: 767px) {
+  .glass {
+    background-color: var(--color-surface);
+    backdrop-filter: none;
+  }
+}
+
 .range-input::-webkit-slider-runnable-track {
   height: 36px;
   background: transparent;
@@ -320,7 +349,6 @@
   cursor: grabbing;
   transform: scale(1.06);
 }
-
 .range-input::-moz-range-track {
   height: 36px;
   background: transparent;
@@ -339,7 +367,6 @@
 .range-input::-moz-range-thumb:hover {
   border-color: var(--color-brand);
 }
-
 .range-input:focus { outline: none; }
 .range-input:focus-visible::-webkit-slider-thumb {
   border-color: var(--color-brand);
@@ -351,7 +378,7 @@
 }
 
 /* ============================================================
-   SCROLL-DRIVEN REVEAL (progressive enhancement)
+   SCROLL-DRIVEN REVEAL
    ============================================================ */
 
 @supports (animation-timeline: view()) {
@@ -365,7 +392,7 @@
 }
 
 /* ============================================================
-   PRINT — invoice sheet only
+   PRINT
    ============================================================ */
 
 @media print {
