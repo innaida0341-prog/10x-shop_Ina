@@ -10,7 +10,7 @@ import { ActiveFilters } from "@/components/catalog/ActiveFilters";
 import { PriceRangeFilterPanel } from "@/components/catalog/PriceRangeFilterPanel";
 import { ProductGrid } from "@/components/product/ProductGrid";
 import { QuickViewDrawer } from "@/components/product/QuickViewDrawer";
-import { SkeletonGrid } from "@/components/ui/SkeletonCard";
+import { SkeletonGrid } from "@/components/ui/SkeletonGrid";
 import { ErrorState } from "@/components/ui/ErrorState";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Spinner } from "@/components/ui/Spinner";
