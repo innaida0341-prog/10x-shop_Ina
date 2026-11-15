@@ -1,12 +1,6 @@
-
-## PLAN.md
-
-```md
-# PLAN — 10X Shop
-
 ## Goal & Scope
-Deliver a resilient storefront SPA. CORE is the pass threshold and is implemented first; FULL is added
-only on top of a working CORE.
+
+Deliver a resilient storefront SPA. CORE is the pass threshold and is implemented first; FULL is added only on top of a working CORE.
 
 | Module | CORE scope | FULL scope |
 | --- | --- | --- |
@@ -18,7 +12,7 @@ only on top of a working CORE.
 
 ## WBS
 
-| Epic | Tasks | Est. h | Phase |
+| Epic | Tasks | Est. h | Week |
 | --- | --- | --- | --- |
 | Setup | Vite+TS strict, Tailwind v4, ESLint, scripts, path alias | 2 | 1 |
 | Domain | types, constants, format/url/sort/validation/guards | 2.5 | 1 |
@@ -34,20 +28,18 @@ only on top of a working CORE.
 | Quality | responsive pass, a11y, lazy routes, memo, Lighthouse, compatibility | 3 | 3 |
 | Docs | README, REPORT, DEBUG-LOG, COMPATIBILITY, progress notes, deploy | 2.5 | 3 |
 
-## Risks & mitigation
-1. **DummyJSON unavailable or slow** → every fetch has loading/error/empty states plus Retry; the shell,
-   cart and orders keep working offline because they read from local storage.
-2. **Stale responses overwriting fresh ones during fast typing** → debounce 400 ms + `AbortController`
-   cleanup in `useFetch`; verified in the Network panel (cancelled requests).
-3. **Corrupted `localStorage` crashing the app on boot** → `StorageService<T>` parses into `unknown` and
-   narrows with type guards, returning `null` on any mismatch.
-4. **Time overrun** → CORE is finished and deployed before any FULL work starts; FULL is cut from the
-   bottom of the priority list (Profile → Orders → Reviews → Promo → filters).
+## Risks & Mitigation
+
+1. **DummyJSON unavailable or slow** → every fetch has loading/error/empty states plus Retry; the shell, cart and orders keep working offline because they read from local storage.
+2. **Stale responses overwriting fresh ones during fast typing** → debounce 400 ms + `AbortController` cleanup in `useFetch`; verified in the Network panel (cancelled requests).
+3. **Corrupted `localStorage` crashing the app on boot** → `StorageService<T>` parses into `unknown` and narrows with type guards, returning `null` on any mismatch.
+4. **Time overrun** → CORE is finished and deployed before any FULL work starts; FULL is cut from the bottom of the priority list (Profile → Orders → Reviews → Promo → filters).
 5. **SPA 404 on deep links after deploy** → `vercel.json` rewrite / `_redirects` committed with the first deploy.
 
 ## Definition of Done (per task)
+
 - `npm run typecheck` and `npm run lint` return 0 errors, no `any`
 - Feature works at 375 px and desktop with no horizontal scroll
 - Loading, error and empty paths are handled where data is involved
 - Keyboard reachable with a visible focus ring; labels tied to inputs
-- Committed with a conventional prefix on a feature branch and merged through a PR
+- Committed with a conventional prefix and pushed
