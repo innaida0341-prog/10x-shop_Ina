@@ -1,0 +1,406 @@
+@import "tailwindcss";
+
+/* ============================================================
+   CUSTOM VARIANTS
+   ============================================================ */
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+@custom-variant hocus (&:hover, &:focus-visible);
+@custom-variant picked (&[data-picked="true"]);
+@custom-variant busy (&[data-busy="true"]);
+
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+
+@theme {
+  /* Brand family — carries the largest fields */
+  --color-brand: #6d5ef6;
+  --color-brand-deep: #4a3ad4;
+  --color-brand-soft: #eeebff;
+
+  /* Full-chroma accents */
+  --color-accent: #ff4d8d;
+  --color-wish: #ff2d78;
+  --color-wish-soft: #ffe4ee;
+  --color-range: #06b6d4;
+  --color-cyan: #22d3ee;
+  --color-save: #84cc16;
+  --color-lime: #a3e635;
+  --color-amber: #ffb020;
+
+  /* Semantic tones */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+  --color-info: #0ea5e9;
+
+  /* Warm neutrals — background, surface, overlay, border */
+  --color-bg: #f4f2ee;
+  --color-surface: #ffffff;
+  --color-surface-2: #faf8f5;
+  --color-text: #11131b;
+  --color-muted: #5f6478;
+  --color-border: #e5e0d8;
+
+  --radius-card: 1.15rem;
+
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --animate-fade-up: fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-drift: drift 28s ease-in-out infinite alternate;
+  --animate-shimmer: shimmer 1.6s linear infinite;
+  --animate-pop: pop 0.32s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  --animate-slide-in: slide-in 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-slide-up: slide-up 0.34s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-scale-in: scale-in 0.26s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  --animate-scrim: scrim 0.28s ease both;
+}
+
+/* ============================================================
+   KEYFRAMES
+   ============================================================ */
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes drift {
+  from { transform: translate3d(-4%, -3%, 0) scale(1); }
+  to { transform: translate3d(5%, 4%, 0) scale(1.15); }
+}
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+@keyframes pop {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes slide-in {
+  from { transform: translateX(100%); }
+  to { transform: none; }
+}
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.94); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes scrim {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes reveal {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ============================================================
+   BASE LAYER
+   ============================================================ */
+
+@layer base {
+  html {
+    color-scheme: light;
+    background-color: var(--color-bg);
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-brand) transparent;
+  }
+
+  [data-theme="dark"] {
+    color-scheme: dark;
+    --color-bg: #080a12;
+    --color-surface: #11141e;
+    --color-surface-2: #171b28;
+    --color-text: #eceef8;
+    --color-muted: #98a0bb;
+    --color-border: #232838;
+    --color-brand-soft: #1b1940;
+    --color-wish-soft: #2a1220;
+  }
+
+  body {
+    @apply text-text font-sans antialiased;
+    min-height: 100dvh;
+    margin: 0;
+    accent-color: var(--color-brand);
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display;
+    letter-spacing: -0.025em;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 3px;
+    border-radius: 8px;
+  }
+
+  ::selection {
+    background: var(--color-brand);
+    color: #fff;
+  }
+
+  ::placeholder {
+    color: color-mix(in oklab, var(--color-muted) 80%, transparent);
+    opacity: 1;
+  }
+
+  /* Global scrollbar drawn in the artifact's own palette */
+  ::-webkit-scrollbar { width: 11px; height: 11px; }
+  ::-webkit-scrollbar-track {
+    background: color-mix(in oklab, var(--color-brand) 9%, transparent);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--color-brand), var(--color-accent));
+    border-radius: 999px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, var(--color-accent), var(--color-range));
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-corner { background: transparent; }
+
+  input, select, textarea, button { font: inherit; }
+}
+
+/* ============================================================
+   CUSTOM UTILITIES
+   ============================================================ */
+
+@utility card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+}
+
+@utility glass {
+  background-color: color-mix(in oklab, var(--color-surface) 76%, transparent);
+  backdrop-filter: blur(16px) saturate(1.5);
+}
+
+@utility tap {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+@utility field {
+  width: 100%;
+  min-height: 46px;
+  padding: 0.65rem 0.9rem;
+  border-radius: 0.8rem;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface-2);
+  color: var(--color-text);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+}
+
+@utility shimmer {
+  background-image: linear-gradient(90deg,
+    color-mix(in oklab, var(--color-border) 45%, transparent) 25%,
+    color-mix(in oklab, var(--color-border) 15%, transparent) 37%,
+    color-mix(in oklab, var(--color-border) 45%, transparent) 63%);
+  background-size: 200% 100%;
+  animation: var(--animate-shimmer);
+}
+
+@utility chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 34px;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface-2);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  transition: border-color 0.16s ease, color 0.16s ease, background-color 0.16s ease;
+}
+
+@utility scroll-fade {
+  mask-image: linear-gradient(90deg, transparent, #000 1.5rem, #000 calc(100% - 1.5rem), transparent);
+}
+
+@utility nice-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-brand) transparent;
+
+  &::-webkit-scrollbar { width: 9px; height: 9px; }
+  &::-webkit-scrollbar-track {
+    background: color-mix(in oklab, var(--color-brand) 10%, transparent);
+    border-radius: 999px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--color-brand), var(--color-wish));
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, var(--color-wish), var(--color-range));
+    background-clip: content-box;
+  }
+}
+
+@utility range-input {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 2.25rem;
+  width: 100%;
+  margin: 0;
+  appearance: none;
+  background: transparent;
+  pointer-events: none;
+}
+
+@utility reveal-on-scroll {
+  opacity: 1;
+}
+
+/* ============================================================
+   COMPONENT STATE RULES (unlayered — win over utilities)
+   ============================================================ */
+
+.field:hover {
+  border-color: color-mix(in oklab, var(--color-brand) 45%, var(--color-border));
+}
+
+.field:focus {
+  outline: none;
+  border-color: var(--color-brand);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-brand) 30%, transparent);
+}
+
+.field[aria-invalid="true"] {
+  border-color: var(--color-danger);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-danger) 16%, transparent);
+}
+
+.field:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+/* Dual-thumb price slider: only the thumbs receive pointer events,
+   so two stacked inputs stay independently draggable. */
+.range-input::-webkit-slider-runnable-track {
+  height: 36px;
+  background: transparent;
+  border: 0;
+}
+.range-input::-webkit-slider-thumb {
+  appearance: none;
+  pointer-events: auto;
+  height: 22px;
+  width: 22px;
+  margin-top: 7px;
+  border-radius: 999px;
+  background: var(--color-surface);
+  border: 3px solid var(--color-range);
+  box-shadow: 0 3px 10px -2px color-mix(in oklab, var(--color-range) 60%, transparent);
+  cursor: grab;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.range-input::-webkit-slider-thumb:hover {
+  transform: scale(1.14);
+  border-color: var(--color-brand);
+}
+.range-input::-webkit-slider-thumb:active {
+  cursor: grabbing;
+  transform: scale(1.06);
+}
+
+.range-input::-moz-range-track {
+  height: 36px;
+  background: transparent;
+  border: 0;
+}
+.range-input::-moz-range-thumb {
+  pointer-events: auto;
+  height: 20px;
+  width: 20px;
+  border-radius: 999px;
+  background: var(--color-surface);
+  border: 3px solid var(--color-range);
+  box-shadow: 0 3px 10px -2px color-mix(in oklab, var(--color-range) 60%, transparent);
+  cursor: grab;
+}
+.range-input::-moz-range-thumb:hover {
+  border-color: var(--color-brand);
+}
+
+.range-input:focus { outline: none; }
+.range-input:focus-visible::-webkit-slider-thumb {
+  border-color: var(--color-brand);
+  box-shadow: 0 0 0 5px color-mix(in oklab, var(--color-brand) 32%, transparent);
+}
+.range-input:focus-visible::-moz-range-thumb {
+  border-color: var(--color-brand);
+  box-shadow: 0 0 0 5px color-mix(in oklab, var(--color-brand) 32%, transparent);
+}
+
+/* ============================================================
+   SCROLL-DRIVEN REVEAL (progressive enhancement)
+   ============================================================ */
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal-on-scroll {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
+  }
+}
+
+/* ============================================================
+   PRINT — invoice sheet only
+   ============================================================ */
+
+@media print {
+  [data-print="hide"] { display: none !important; }
+
+  html, body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  .invoice-sheet {
+    box-shadow: none !important;
+    border: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: none !important;
+    border-radius: 0 !important;
+  }
+
+  @page {
+    size: A4;
+    margin: 16mm;
+  }
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  html { scroll-behavior: auto; }
+}
